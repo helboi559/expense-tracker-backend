@@ -1,9 +1,9 @@
 import { OAuth2Client } from 'google-auth-library';
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-//intercept ANY request user to be authorized
+//intercept ANY request user to be authorized OAUTH/JWT
 const auth = async (req, res, next) => {
   try {
     //get `Bearer ${currentUser.token}`
@@ -25,10 +25,12 @@ const auth = async (req, res, next) => {
         // role: 'basic',
       };
     } else {
-    //   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    //   const { id, name, photoURL, role } = decodedToken;
-    //   req.user = { id, name, photoURL, role };
-        //verify token
+      //check if its jwt token and decode
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+      //extract and set req.user
+      const { id, name, photoURL } = decodedToken;
+      req.user = { id, name, photoURL };
+        
     }
     next();
   } catch (error) {

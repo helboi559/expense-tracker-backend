@@ -66,22 +66,20 @@ export const login = tryCatch(async (req, res) => {
   });
 });
 
-// export const updateProfile = tryCatch(async (req, res) => {
-//   const fields = req.body?.photoURL
-//     ? { name: req.body.name, photoURL: req.body.photoURL }
-//     : { name: req.body.name };
-//   const updatedUser = await User.findByIdAndUpdate(req.user.id, fields, {
-//     new: true,
-//   });
-//   const { _id: id, name, photoURL, role } = updatedUser;
 
-//   await Room.updateMany({ uid: id }, { uName: name, uPhoto: photoURL });
-
-//   const token = jwt.sign({ id, name, photoURL, role }, process.env.JWT_SECRET, {
-//     expiresIn: '1h',
-//   });
-//   res.status(200).json({ success: true, result: { name, photoURL, token } });
-// });
+export const updateProfile = tryCatch(async (req, res) => {
+    //mongoose update
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
+        new: true,
+    });
+    console.log("updatedUser",updatedUser)
+    const { _id: id, name, photoURL } = updatedUser;
+    //create new token
+    const token = jwt.sign({ id, name, photoURL }, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+    });
+    res.status(200).json({ success: true, result: { name, photoURL, token } });
+});
 
 // export const getUsers = tryCatch(async (req, res) => {
 //   const users = await User.find().sort({ _id: -1 });
