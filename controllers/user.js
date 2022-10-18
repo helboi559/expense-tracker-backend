@@ -2,8 +2,7 @@ import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import tryCatch from './util/tryCatch.js';
-// import tryCatch from './utils/tryCatch.js';
-// import Room from '../models/Room.js';
+
 
 //import helper try/catch function to avoid repeating
 
